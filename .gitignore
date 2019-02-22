@@ -1,4 +1,4 @@
 .idea
 cmake-build-debug
-CMakeLists
-catch.hpp
+CMakeLists.txt
+catch.h
