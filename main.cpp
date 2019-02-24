@@ -23,21 +23,22 @@ int stringcalc(string s)
     if(s.empty())     //empty string returns 0
         return 0;
     int digcount = 0;
-    int commacount = 0;
+    int delimcount = 0;
     for(int i = 0; i < s.length(); ++i) { //
         if (isdigit(s[i]))
             digcount++;
-        if(s[i] == ','){
-            if(isdigit(s[i+1]) && isdigit(s[i-1]))
-                ++commacount;
+        if(s[i] == ',' || s[i] == ' '){
+            if(isdigit(s[i+1]) && isdigit(s[i-1])){
+                ++delimcount;
+            }
         }
     }
     if(digcount == s.length())
         return stoi(s);
-    if (commacount == 1 && digcount == s.length()-1){
+    if ((delimcount == 1 || delimcount == 2) && digcount == s.length()-1){
         string num1, num2;
         for(const auto i : s){
-            if(i != ',')
+            if(i != ',' && i != ' ')
                 num1 += i;
             else {
                 num2 = num1;
@@ -68,4 +69,11 @@ TEST_CASE( "Two numbers, comma delimited, returns the sum", "[stringcalc]" ) {
     REQUIRE( stringcalc("9,1") == 10 );
     REQUIRE( stringcalc("5,2") == 7 );
     REQUIRE( stringcalc("23,3") == 26 );
+}
+
+TEST_CASE( "Two numbers, newline delimited, returns the sum", "[stringcalc]" ) {
+    REQUIRE( stringcalc("23 12") == 35 );
+    REQUIRE( stringcalc("17 4") == 21 );
+    REQUIRE( stringcalc("6 0") == 6 );
+    REQUIRE( stringcalc("34 2") == 36 );
 }
